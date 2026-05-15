@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://22oyi5mpjaft"
+path="res://.godot/imported/30 Retro Space Level Up.mp3-8f4736bc744e3e1e936d49bed04c93ef.mp3str"
+
+[deps]
+
+source_file="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/30 Retro Space Level Up.mp3"
+dest_files=["res://.godot/imported/30 Retro Space Level Up.mp3-8f4736bc744e3e1e936d49bed04c93ef.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

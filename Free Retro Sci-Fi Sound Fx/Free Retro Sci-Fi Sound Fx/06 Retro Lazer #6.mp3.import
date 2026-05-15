@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bvflp517i6wpi"
+path="res://.godot/imported/06 Retro Lazer #6.mp3-eb9f4dbaf20905d05a6c501fea9d349b.mp3str"
+
+[deps]
+
+source_file="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/06 Retro Lazer #6.mp3"
+dest_files=["res://.godot/imported/06 Retro Lazer #6.mp3-eb9f4dbaf20905d05a6c501fea9d349b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

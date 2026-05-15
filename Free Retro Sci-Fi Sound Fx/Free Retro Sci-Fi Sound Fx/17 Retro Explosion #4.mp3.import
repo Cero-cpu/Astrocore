@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://wjymx1kk54mv"
+path="res://.godot/imported/17 Retro Explosion #4.mp3-08060232d491cd477fceb94d0e123d3b.mp3str"
+
+[deps]
+
+source_file="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/17 Retro Explosion #4.mp3"
+dest_files=["res://.godot/imported/17 Retro Explosion #4.mp3-08060232d491cd477fceb94d0e123d3b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

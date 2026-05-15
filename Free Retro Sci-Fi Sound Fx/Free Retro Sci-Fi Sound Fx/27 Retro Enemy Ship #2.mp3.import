@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dth3l0jdqbekr"
+path="res://.godot/imported/27 Retro Enemy Ship #2.mp3-0c28b6d49405cf45e3fea6268f3ddbdc.mp3str"
+
+[deps]
+
+source_file="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/27 Retro Enemy Ship #2.mp3"
+dest_files=["res://.godot/imported/27 Retro Enemy Ship #2.mp3-0c28b6d49405cf45e3fea6268f3ddbdc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

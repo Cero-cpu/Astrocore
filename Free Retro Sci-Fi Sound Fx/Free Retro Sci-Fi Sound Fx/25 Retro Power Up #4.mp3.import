@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://di73qy7komvhe"
+path="res://.godot/imported/25 Retro Power Up #4.mp3-a6c03d08f2796312149a16b716dd0945.mp3str"
+
+[deps]
+
+source_file="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/25 Retro Power Up #4.mp3"
+dest_files=["res://.godot/imported/25 Retro Power Up #4.mp3-a6c03d08f2796312149a16b716dd0945.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

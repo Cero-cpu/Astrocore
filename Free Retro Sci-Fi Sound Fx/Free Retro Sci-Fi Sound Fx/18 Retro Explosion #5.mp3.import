@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cf357uc3afro3"
+path="res://.godot/imported/18 Retro Explosion #5.mp3-0bd1e3b4beab819451599b8ef5ebc594.mp3str"
+
+[deps]
+
+source_file="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/18 Retro Explosion #5.mp3"
+dest_files=["res://.godot/imported/18 Retro Explosion #5.mp3-0bd1e3b4beab819451599b8ef5ebc594.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cg0kkrd560mbq"
+path="res://.godot/imported/19 Retro Enemy Dying #1.mp3-9e8bdd104f10a73357cc5e2668aa480b.mp3str"
+
+[deps]
+
+source_file="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/19 Retro Enemy Dying #1.mp3"
+dest_files=["res://.godot/imported/19 Retro Enemy Dying #1.mp3-9e8bdd104f10a73357cc5e2668aa480b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://df671dicwytf"
+path="res://.godot/imported/10 Retro Space Alarm #2.mp3-a9c5c2f0dbcb7655e80b4327518e84e9.mp3str"
+
+[deps]
+
+source_file="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/10 Retro Space Alarm #2.mp3"
+dest_files=["res://.godot/imported/10 Retro Space Alarm #2.mp3-a9c5c2f0dbcb7655e80b4327518e84e9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
