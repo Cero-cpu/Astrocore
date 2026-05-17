@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://b5b3o60u8gwfa"]
+
+[ext_resource type="PackedScene" uid="uid://cnrg6c73thw43" path="res://src/scenes/player.tscn" id="1_player"]
+[ext_resource type="Texture2D" uid="uid://cmms5c4jpt521" path="res://Skyel Space Shooter - FREE/Spaceships/spr_spaceship_02_animation.png" id="3_anim"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f8qyv"]
+atlas = ExtResource("3_anim")
+region = Rect2(0, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_otqke"]
+atlas = ExtResource("3_anim")
+region = Rect2(22, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u605k"]
+atlas = ExtResource("3_anim")
+region = Rect2(44, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yc4b1"]
+atlas = ExtResource("3_anim")
+region = Rect2(66, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qrnk6"]
+atlas = ExtResource("3_anim")
+region = Rect2(0, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wcsvl"]
+atlas = ExtResource("3_anim")
+region = Rect2(22, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uwftf"]
+atlas = ExtResource("3_anim")
+region = Rect2(44, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sddjn"]
+atlas = ExtResource("3_anim")
+region = Rect2(66, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iv68j"]
+atlas = ExtResource("3_anim")
+region = Rect2(0, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a22tp"]
+atlas = ExtResource("3_anim")
+region = Rect2(22, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hun5p"]
+atlas = ExtResource("3_anim")
+region = Rect2(44, 0, 22, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qolic"]
+atlas = ExtResource("3_anim")
+region = Rect2(66, 0, 22, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_skin02"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f8qyv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otqke")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u605k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yc4b1")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qrnk6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wcsvl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uwftf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sddjn")
+}],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iv68j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a22tp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hun5p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qolic")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}]
+
+[node name="Player" unique_id=547336947 instance=ExtResource("1_player")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=2112418072]
+sprite_frames = SubResource("SpriteFrames_skin02")
+animation = &"right"
+frame_progress = 0.0094302185
+
+[node name="LaserSound" parent="." index="1"]
+bus = &"Master"

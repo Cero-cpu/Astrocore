@@ -1,0 +1,275 @@
+================================================================================
+          ASTROCORE - COMPLETE PROJECT INVENTORY & SYSTEM MAP
+================================================================================
+This file acts as a permanent memory anchor and structural catalog of the game 
+"Astrocore". It is designed to prevent AI coding models or human developers from 
+accidentally removing, modifying, or breaking existing features when scaling up 
+or refactoring the codebase.
+
+--------------------------------------------------------------------------------
+1. PROJECT OVERVIEW & SCREEN SPECIFICATIONS
+--------------------------------------------------------------------------------
+- Genre: Vertical Neon Sci-Fi Arcade Shoot 'Em Up (Shmup) with dynamic progression.
+- Target Resolution: 720 x 1280 (16:9 Vertical Mobile/Arcade Aspect Ratio).
+- Window Settings (project.godot):
+  * Width: 720, Height: 1280
+  * Stretch Mode: canvas_items, Stretch Aspect: expand
+  * Handheld Orientation: Vertical
+  * Emulate touch from mouse enabled (pointing/emulate_touch_from_mouse=true)
+  * Render Driver: Direct3D 12 (Windows) / Forward Plus (Linux/OSX)
+  * Default Texture Filter: 0 (Nearest-Neighbor / Pixel Art Perfect)
+
+--------------------------------------------------------------------------------
+2. DIRECTORY STRUCTURE & FILE LIST (IN ORDER)
+--------------------------------------------------------------------------------
+[Root Folder: /home/julian/brotito]
+ ├── project.godot            # Main Godot project configuration and global MusicManager autoload.
+ ├── lobby.tscn                # Main Menu/Lobby scene (entry point).
+ ├── lobby.gd                  # Controller for skin selection (touch-scroll optimized), title, parallax.
+ ├── game.tscn                 # Primary gameplay stage container.
+ ├── game.gd                   # Game session controller, level spawner, clean HUD UI, scoring, 10 backdrops.
+ ├── player.tscn               # Playable spaceship container.
+ ├── player.gd                 # Spaceship movement, inputs, shooting controller, upgrades, health, sfx mix.
+ ├── projectile.tscn           # Player weapon projectile scene.
+ ├── projectile.gd             # Player projectile logic, wave/snake/orbit processing, area detection.
+ ├── enemy.tscn                # Regular enemy (ship or asteroid) scene.
+ ├── enemy.gd                  # Enemy controller, border clamp, collision shapes, health pop tween, sfx mix.
+ ├── enemy_projectile.tscn    # Red neon enemy bullets.
+ ├── enemy_projectile.gd       # Enemy projectile linear path and damage logic.
+ ├── boss.tscn                 # Stage 1 Boss container.
+ ├── boss.gd                   # Boss state, movement, weapon spray, balanced health & explosion sfx mix.
+ ├── boss_2.tscn               # Stage 2 Boss container.
+ ├── boss_2.gd                 # Boss 2 inherit script, spiral bullet patterns, modulation override.
+ ├── powerup.tscn              # Collectible powerup pill scene.
+ ├── powerup.gd                # Floating item behavior, dynamic 32x32 cell slicing of Bonuses-0001.png.
+ ├── explosion.tscn            # Standard explosion sprite-sheet sheet scene.
+ ├── explosion.gd              # Sprite-sheet frame animation (8 frames) with glowing colors & camera shake.
+ ├── explosion_pixel.tscn      # Pixelated variant explosion.
+ ├── explosion_pixel.gd        # 8-frame pixelated explosion.
+ ├── music_manager.gd          # Global crossfading Music Autoload Singleton (process-pause immune).
+ ├── effects_manager.gd        # Global visual effects layer (shader flash, glitch, combos, custom labels).
+ ├── character_controller.gd   # Base class for the 2D platformer skins (walk, jump, attack).
+ ├── character_one.gd          # 2D platformer Character 1 script.
+ ├── CharacterOne.tscn         # 2D platformer Character 1 scene.
+ ├── character_two.gd          # 2D platformer Character 2 script.
+ ├── CharacterTwo.tscn         # 2D platformer Character 2 scene.
+ ├── crawlid.gd                # Leftover 2D platformer insect script.
+ ├── Crawlid.tscn              # Leftover 2D platformer insect scene.
+ ├── icon.svg                  # Default Godot icon.
+ ├── fonts-ttf/                # Custom TTF fonts folder.
+ ├── src/sounds/               # Audio music tracks folder.
+ │    └── loby/                # Lobby tracks.
+ │         └── loby_primera_musica.mp3  # First uploaded lobby track.
+ ├── fonts-ttf/                # Custom TTF fonts folder.
+ │    └── BlockyPixel.ttf      # Main high-fidelity retro blocky font used across HUD & Popups.
+ ├── skins/                    # Alternate player spaceship skins (scenes).
+ │    ├── player_skin_01.tscn  # Skin 1 - Neon Cyan modulation default.
+ │    ├── player_skin_02.tscn  # Skin 2 - Hot Pink.
+ │    ├── player_skin_03.tscn  # Skin 3 - Neon Green.
+ │    ├── player_skin_04.tscn  # Skin 4 - Solar Orange.
+ │    ├── player_skin_05.tscn  # Skin 5 - Electric Purple.
+ │    ├── player_skin_06.tscn  # Skin 6 - Golden Yellow.
+ │    └── player_skin_07.tscn  # Skin 7 - Laser Red.
+ ├── efectos_buff/             # Sprites for power-ups and active buffs.
+ │    ├── buffsSprites1.png -> buffsSprites4.png
+ ├── Skyel Space Shooter - FREE/    # Visual asset bundle 1.
+ ├── Pixel SHMUP Free 1.3/           # Visual asset bundle 2.
+ └── Free Retro Sci-Fi Sound Fx/     # Audio SFX bundle.
+
+--------------------------------------------------------------------------------
+3. DETAILED FILE AND SCRIPT SCHEMATICS
+--------------------------------------------------------------------------------
+
+=======================================
+[ lobby.gd // lobby.tscn ]
+=======================================
+* Root Node: Node2D
+* Purpose: Provides an elite pilot terminal (Lobby) featuring star parallax, ship rotation/floating tweens, ship skin swapping, and starting buttons.
+* Key Variables:
+  - `scroll_speed`: Float (Background vertical scroll rate, 50.0).
+  - `scroll_offset`: Float (Tracks parallax scroll value).
+  - `touch_active` / `touch_dragging` / `touch_start_pos`: Vector2/Bool (Touch swipe drag variables).
+* Key Methods:
+  - `_ready()`: Ensures tree is unpaused. Restores last-chosen player skin. Connects global `MusicManager.play_lobby_music()`.
+  - `_process(delta)`: Scrolls stars/stars_far and floats the ship preview vertically via sin wave.
+  - `_setup_lobby_ui()`: Creates and styles a centered dynamic terminal layout. Features Title (ASTROCORE), Subtitle, and skin GridContainer.
+    * Touch scrolling bypass: Intercepts `gui_input` of buttons and `ScrollContainer` using global coordinates (`event.global_position`) to allow seamless mobile swipe-scrolling over the buttons while keeping tapping responsive.
+  - `_select_skin(path, button)`: Connects button trigger to temporary loading, setting the ship's skin, and playing bounce tween feedback.
+
+=======================================
+[ player.gd // player.tscn ]
+=======================================
+* Root Node: Area2D (Collision Layer: 1 | Collision Mask: 12)
+* Purpose: Handles the user's ship movement, weapon styles, fire rates, upgrades, invincibility, and skins.
+* Key Variables:
+  - `speed`: Float (400.0)
+  - `health`: Int (100)
+  - `max_health`: Int (100)
+  - `fire_rate`: Float (0.5 base)
+  - `evolution_level`: Int (1 to 5, scales size and projectile bursts)
+  - `current_style`: WeaponStyle enum (Tracks current powerup weapon style)
+  - `selected_skin_path`: Static String (Saves selected ship across lobby/game)
+  - `projectile_color`: Color (Unique HDR color matched to chosen skin)
+* Key Methods:
+  - `_ready()`: Softens continuous laser sounds to `-14.0` dB to keep a discrete mechanical tick.
+  - `_process(delta)`: Lerp-follows mouse or touch drag inputs. Tilts ship rotation based on horizontal direction.
+  - `set_skin(scene_path)`: Loads skin scene, duplicates its `SpriteFrames` into Player's `AnimatedSprite2D`, maps neon bullet colors, and removes recolor shader for custom skins.
+  - `shoot()`: Contains 18 match weapon cases that spawn projectiles with custom patterns.
+  - `_play_sfx(stream, volume_db)`: Route audio clips directly to the `"SFX"` bus for master volume control.
+  - `take_damage(amount)`: Activates invincibility, flashes screen red, shakes screen, triggers hit-stop, and plays damage sfx at `-5.0` dB.
+
+=======================================
+[ projectile.gd // projectile.tscn ]
+=======================================
+* Root Node: Area2D (Collision Layer: 2 | Collision Mask: 4)
+* Purpose: Configures and drives player bullets with complex patterns like spirals, waves, orbits, and cleans them when out of screen.
+* Key Variables:
+  - `speed`: Float (600.0)
+  - `direction`: Vector2 (UP default)
+  - `skin_color`: Color (Sentinel: -1 means random pink/cyan, else matches skin)
+* Key Methods:
+  - `_process(delta)`:
+    * "wave_projectiles": Oscillates position.x via sin(time * 10.0) * 10.0 (supports wave_flip).
+    * "snake_projectiles": Oscillates position.x via cos(time * 20.0) * 20.0.
+    * "orbit_projectiles": Moves in circular orbit around player offset by rotated angle.
+    * General: Moves lineally along `direction` * `speed`.
+  - `_on_area_entered(area)`: Triggers `take_damage(1)` if area is in "enemies" group, then frees itself.
+
+=======================================
+[ enemy.gd // enemy.tscn ]
+=======================================
+* Root Node: Area2D (Collision Layer: 4 | Collision Mask: 3)
+* Purpose: Defines dynamic normal enemies (spaceships and asteroids). Fixes size-matching between visual textures and physical hitboxes.
+* Key Variables:
+  - `health`: Int (1 + game_time/60.0, scales over time)
+  - `speed`: Float (Scales over time with game_time * 2.0)
+  - `original_sprite_scale`: Vector2 (Stored in _ready, prevents hit shrinking bugs)
+  - `is_asteroid`: Bool (Asteroids tumble, lack shooters, scale whole body)
+* Key Methods:
+  - `_ready()`: Loads 1 of 17 textures dynamically.
+    * Dynamically configures `CollisionShape2D.shape` (a `RectangleShape2D`) matching texture size * `original_sprite_scale` + `Vector2(8, 8)` generous padding for satisfying combat feel.
+    * Clamp horizontal position dynamically using texture scale and a `12.0` px safety buffer, ensuring that no wing or rotating corner ever gets cut off by screen boundaries.
+  - `take_damage(amount)`:
+    * Hits: SFX enrouted to `"SFX"` at `-15.0` dB, pure white HDR flash, and a scale-pop.
+    * Death: Triggers explosion, screen shake, and bouncy floating combo score popups. Enroutes normal explosion deaths to `"SFX"` at `-10.0` dB.
+
+=======================================
+[ game.gd // game.tscn ]
+=======================================
+* Root Node: Node2D
+* Purpose: Central gameplay supervisor. Manages score, game levels, 10 backdrops, combos, boss triggers, powerup spawns, vignette HP alerts, and pauses.
+* Key Variables:
+  - `score`: Int
+  - `game_level`: Int
+  - `total_kills`: Int (spawns a boss every 50 kills)
+  - `boss_active`: Bool (disables spawns, spawns continuous boss items)
+  - `themes`: Array (10 curated cosmos themes using dynamic layered backdrops)
+* Key Methods:
+  - `_ready()`: Triggers `MusicManager.play_game_music()`. Sets up seamless repeating scroll region. Removes the blurry cyan `HUDFrame` glow and disables grid backdrops to ensure perfect map clarity.
+  - `_process(delta)`: Synchronizes scrolling parallax layers: `$BackgroundTex` (always fully opaque, solid backdrop) and `$Stars` (independent transparent scrolling nebula overlay), preventing any gray engine viewport gaps.
+  - `on_enemy_killed()`: Increments combo, awards score, rolls for item drops, and triggers Boss. Resolves division warnings using modulo math (`total_kills - (total_kills % KILLS_PER_BOSS)`).
+  - `spawn_boss(scene)`: Triggers warning labels and chromatic aberration, then spawns Boss or Boss2.
+  - `on_boss_killed()`: Triggers slow-mo, screen flash, and spawns powerups.
+  - `upgrade_player()`: Increases `game_level`, transitions the background theme color & texture via synchronized parallel tweens.
+  - `setup_ui()`: Renders progress bar, health bars, pause screens, retry/lobby menus. Updates time formatting with float literals to prevent warnings.
+
+=======================================
+[ boss.gd // boss.tscn ]
+=======================================
+* Root Node: Area2D (Collision Layer: 4 | Collision Mask: 3)
+* Purpose: State, movement, and weapon controls for Stage 1 Boss.
+* Key Variables:
+  - `health`: Int (200 base)
+  - `shoot_rate`: Float (1.0s)
+* Key Methods:
+  - `_ready()`: Modulates purple neon. Animates global boss health bar loading.
+  - `_process(delta)`: Enters screen vertically, then moves horizontally. Features dynamic horizontal limits (`half_w + 10.0` safety margin) to prevent texture edge clipping.
+  - `shoot()`: Fires a triple horizontal red projectile spread.
+  - `die()`: Triggers chromatic aberration, slow-mo (`0.5s` at `0.4` scale), screen shake (`0.8s` at `8.0` intensity). Spawns a chain of 12 explosions with secondary sounds attenuated to `-12.0` dB to avoid stacking audio blowout, finishing with a final full-volume (`0.0` dB) blast.
+
+=======================================
+[ boss_2.gd // boss_2.tscn ]
+=======================================
+* Parent Script: "res://src/scripts/boss.gd"
+* Purpose: Stage 2 Boss override.
+* Key Variables:
+  - `health`: Int (600 base)
+  - `shoot_rate`: Float (0.5s)
+* Key Methods:
+  - `_ready()`: Sets textures, modulates emerald green neon, initializes 600 HP.
+  - `shoot()`: Launches a deadly rotating spiral spray consisting of 12 bullets per cycle.
+
+=======================================
+[ powerup.gd // powerup.tscn ]
+=======================================
+* Root Node: Area2D (Collision Layer: 16 | Collision Mask: 1)
+* Purpose: Configures floating weapon pickup boxes. Disables shaders and slices real high-fidelity pixel art.
+* Key Variables:
+  - `type`: Type enum (18 weapon/effect types)
+* Key Methods:
+  - `_ready()`: Dynamically crops a perfect `32x32` pixel slice from the Bonuses-0001.png spritesheet based on type (`type % 5`).
+    * Injects 5 rotating frames into the Godot 4 pre-created `"default"` animation slot of `AnimatedSprite2D` and runs at a smooth `10.0` FPS.
+    * Applies a soft arcade pulsing tween between scale `2.0` and `2.4`.
+  - `_on_area_entered(area)`: Invokes player's `apply_powerup()` and spawns 25 matched neon particle bursts.
+
+=======================================
+[ music_manager.gd ]
+=======================================
+* Root Node: Node (Autoload Singleton registered in project.godot)
+* Purpose: Paused-immune cross-scene background music manager featuring professional 1.5s Sine crossfades.
+* Key Variables:
+  - `lobby_music_path`: String ("res://src/sounds/loby/loby_primera_musica.mp3")
+  - `game_music_path`: String ("res://src/sounds/game/game_music.mp3")
+  - `target_volume_db`: Float (-6.0 dB)
+* Key Methods:
+  - `_ready()`: Configures `PROCESS_MODE_ALWAYS` and instantiates two `AudioStreamPlayer` nodes enrouted to `"Music"` bus.
+  - `play_lobby_music()` / `play_game_music()`: Initiates track transitions.
+  - `play_track(path)`: Safe loading with `FileAccess.file_exists` warnings check to prevent crashes.
+
+=======================================
+[ effects_manager.gd // (effects_manager.tscn implicit) ]
+=======================================
+* Root Node: CanvasLayer (Process Mode: Always)
+* Purpose: Manages global arcade juice: Chromatic aberration pulses, screen flashes, screen glitches, floating hit/combo alerts, weapon popups, and vignette colorization.
+* Key Methods:
+  - `flash(color, duration)`: Tweens white/red panel opacity.
+  - `glitch(intensity, duration)`: Updates shader glitch variables.
+  - `chromatic_pulse(amount, duration)`: Drives screen RGB split shader.
+  - `slow_motion(duration, scale)`: Tweens Engine.time_scale down and restores it.
+  - `show_combo(count)`: Renders big center labels, changes colors based on counts (Yellow -> Gold -> Red -> Cosmic Purple), and scales/rotates them with elastic tweens.
+
+--------------------------------------------------------------------------------
+4. WEAPON & POWER-UP ENUMERATIONS (18 STYLES)
+--------------------------------------------------------------------------------
+Mapped in `player.gd` (WeaponStyle) and `powerup.gd` (Type):
+  0.  SPREAD       - Multidirectional bullet arc.
+  1.  RAPID        - Rapid vertical stream with slight horizontal drift.
+  2.  HEAVY        - Huge golden shells (scaled 3x) that deal heavy damage.
+  3.  BURST        - Circular explosion of 8 bullets in all directions.
+  4.  LIFE         - Restores +40 system HP.
+  5.  SHIELD       - Active barrier for 8 seconds, modulating ship to neon blue.
+  6.  MULTISHOT    - Spawns parallel bullets from left and right wings.
+  7.  SPEED        - Boosts player movement speed for 10 seconds.
+  8.  WAVE         - Double weaving sin-wave bullets.
+  9.  BACKSHOT     - Quad blast: 3 forward, 1 reverse.
+  10. CIRCLE       - 12-bullet ring expand.
+  11. STREAK       - Machine gun burst (5 fast bullets spaced by 0.05s).
+  12. SPIRAL       - Dual rotating fire hoses.
+  13. CROSS        - 4-direction rotating cross.
+  14. ORBIT        - Shielding bullets that orbit around player ship.
+  15. TSUNAMI      - Wall of 10 massive blue bullets covering the screen.
+  16. GATLING      - Extremely fast fire rate with random bullet spread (15 degrees).
+  17. SNAKE        - Cos-based winding bullets.
+
+--------------------------------------------------------------------------------
+5. CRITICAL DESIGN RULES & AI DIRECTIVES
+--------------------------------------------------------------------------------
+- RULE 1: NEVER HARDCODE sprite scale updates in hit animations. Always use `original_sprite_scale` to prevent shrinking bugs.
+- RULE 2: Keep enemy and boss collision shapes generous (`visual_size + padding`). Keep player hitboxes small and tight.
+- RULE 3: Do not remove any of the 18 WeaponStyle cases inside `player.gd` or `powerup.gd`.
+- RULE 4: Ensure dynamic screen scaling remains intact. Viewport size is `720x1280` in expand mode, and all background assets must scale centered by 1.5x width/height to accommodate safe areas.
+- RULE 5: Keep HDR glow modulations active. Modulation values are high (e.g. Color(5, 0.2, 1.5)) to feed the engine's glow shaders.
+- RULE 6: Balance auditory mixes strictly: continuous lasers at `-14.0` dB, enemy hits at `-15.0` dB, powerups at `-6.0` dB, and enroute all sound effects to the `"SFX"` bus and music tracks to the `"Music"` bus.
+- RULE 7: Mobile scrolling containers must use global coordinates (`event.global_position`) and bypass button swallowing via custom drag threshold checks to ensure buttery smooth swiping.
+- RULE 8: Scrolling backdrops must use fully opaque textures at the bottom (`BackgroundTex`), and transparent elements (nebulae, clouds, stars) as independent overlay layers to eliminate grey engine gaps.
+================================================================================

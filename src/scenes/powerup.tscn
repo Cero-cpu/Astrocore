@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://d1o47kqhnu35q"]
+
+[ext_resource type="Script" uid="uid://qebhiiam7rk7" path="res://src/scripts/powerup.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dsm4uarvt6m0v" path="res://Shoot`em Up/Bonuses-0001.png" id="2_olw5p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nx240"]
+atlas = ExtResource("2_olw5p")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6f378"]
+atlas = ExtResource("2_olw5p")
+region = Rect2(0, 32, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_553hr"]
+atlas = ExtResource("2_olw5p")
+region = Rect2(0, 64, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7j1y2"]
+atlas = ExtResource("2_olw5p")
+region = Rect2(0, 96, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o04s3"]
+atlas = ExtResource("2_olw5p")
+region = Rect2(0, 128, 33, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nx240")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6f378")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_553hr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7j1y2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o04s3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 25.0
+
+[node name="PowerUp" type="Area2D" unique_id=1716116824]
+collision_layer = 8
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1853105699]
+texture_filter = 1
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_1")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=896024154]
+shape = SubResource("CircleShape2D_1")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

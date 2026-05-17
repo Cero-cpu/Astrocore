@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://Skyel Space Shooter - FREE/VFX/spr_explosion_01.png" id="1_texture"]
+[ext_resource type="Script" path="res://src/scripts/explosion.gd" id="2_script"]
+[ext_resource type="AudioStream" path="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/14 Retro Explosion #1.mp3" id="3_audio"]
+
+[node name="Explosion" type="Sprite2D"]
+texture_filter = 1
+texture = ExtResource("1_texture")
+hframes = 8
+script = ExtResource("2_script")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_audio")
+autoplay = true
+bus = &"SFX"
