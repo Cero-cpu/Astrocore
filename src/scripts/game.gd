@@ -41,73 +41,53 @@ const KILLS_PER_BOSS: int = 50
 var themes = [
 	# Theme 0: Classic Cosmic Cyan
 	{
-		"bg": Color(0.01, 0.01, 0.05), 
-		"stars": Color(0.2, 0.8, 1, 1), 
-		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_01.png"),
-		"star_tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_stars.png")
+		"bg": Color(0.01, 0.01, 0.05),
+		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_01.png")
 	},
 	# Theme 1: Crimson Void
 	{
-		"bg": Color(0.05, 0.01, 0.01), 
-		"stars": Color(1, 0.2, 0.2, 1), 
-		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_02.png"),
-		"star_tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_stars.png")
+		"bg": Color(0.05, 0.01, 0.01),
+		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_02.png")
 	},
 	# Theme 2: Deep Emerald Nebula
 	{
-		"bg": Color(0.01, 0.05, 0.02), 
-		"stars": Color(0.2, 1, 0.5, 1), 
-		"tex": preload("res://Shoot`em Up/Background_Space-0001.png"),
-		"star_tex": preload("res://Shoot`em Up/Background_Nebula-0001.png")
+		"bg": Color(0.01, 0.05, 0.02),
+		"tex": preload("res://Shoot`em Up/Background_Full-0001.png")
 	},
 	# Theme 3: Amethyst Cosmic Cloud
 	{
-		"bg": Color(0.04, 0.01, 0.06), 
-		"stars": Color(0.8, 0.2, 1, 1), 
-		"tex": preload("res://Shoot`em Up/Background_Space-0001.png"),
-		"star_tex": preload("res://Shoot`em Up/Background_Nebula-0002.png")
+		"bg": Color(0.04, 0.01, 0.06),
+		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_01.png")
 	},
 	# Theme 4: Sovereign Gold
 	{
-		"bg": Color(0.05, 0.04, 0.01), 
-		"stars": Color(1, 0.8, 0.2, 1), 
-		"tex": preload("res://Shoot`em Up/Background_Full-0001.png"),
-		"star_tex": preload("res://Shoot`em Up/Background_Stars-0001.png")
+		"bg": Color(0.05, 0.04, 0.01),
+		"tex": preload("res://Shoot`em Up/Background_Full-0001.png")
 	},
 	# Theme 5: Deep Space Void
 	{
-		"bg": Color(0.0, 0.0, 0.03), 
-		"stars": Color(0.5, 0.7, 1, 1), 
-		"tex": preload("res://Shoot`em Up/Background_Space-0001.png"),
-		"star_tex": preload("res://Shoot`em Up/Background_SmallStars-0001.png")
+		"bg": Color(0.0, 0.0, 0.03),
+		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_02.png")
 	},
 	# Theme 6: Nebula Orange Flare
 	{
-		"bg": Color(0.05, 0.02, 0.0), 
-		"stars": Color(1, 0.5, 0.1, 1), 
-		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_02.png"),
-		"star_tex": preload("res://Shoot`em Up/Background_Nebula-0001.png")
+		"bg": Color(0.05, 0.02, 0.0),
+		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_02.png")
 	},
 	# Theme 7: Cobalt Stardust
 	{
-		"bg": Color(0.01, 0.01, 0.04), 
-		"stars": Color(0.1, 0.5, 1, 1), 
-		"tex": preload("res://Shoot`em Up/Background_Full-0001.png"),
-		"star_tex": preload("res://Shoot`em Up/Background_SmallStars-0001.png")
+		"bg": Color(0.01, 0.01, 0.04),
+		"tex": preload("res://Shoot`em Up/Background_Full-0001.png")
 	},
 	# Theme 8: Violet Cosmos
 	{
-		"bg": Color(0.03, 0.0, 0.05), 
-		"stars": Color(0.9, 0.1, 0.7, 1), 
-		"tex": preload("res://Shoot`em Up/Background_Space-0001.png"),
-		"star_tex": preload("res://Shoot`em Up/Background_Nebula-0002.png")
+		"bg": Color(0.03, 0.0, 0.05),
+		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_01.png")
 	},
 	# Theme 9: Infinite Horizon
 	{
-		"bg": Color(0.02, 0.02, 0.04), 
-		"stars": Color(1, 1, 1, 1), 
-		"tex": preload("res://Shoot`em Up/Background_Full-0001.png"),
-		"star_tex": preload("res://Shoot`em Up/Background_SmallStars-0001.png")
+		"bg": Color(0.02, 0.02, 0.04),
+		"tex": preload("res://Shoot`em Up/Background_Full-0001.png")
 	}
 ]
 var current_theme_idx: int = 0
@@ -122,7 +102,7 @@ func _ready() -> void:
 	$Background.offset_right = 200
 	
 	# Fix Texture layers (expand to fill dynamic screen width + extra for safety)
-	for node_name in ["BackgroundTex", "BackgroundTexNext", "Stars", "StarsNext"]:
+	for node_name in ["BackgroundTex", "BackgroundTexNext"]:
 		var node = get_node(node_name)
 		if node is Sprite2D:
 			node.centered = true
@@ -164,12 +144,8 @@ func _process(delta: float) -> void:
 	game_time += delta
 	difficulty_timer += delta
 	
-	# Scroll stars and backgrounds (Synchronized to avoid jumps)
-	var star_scroll = delta * 20.0
+	# Scroll backgrounds
 	var bg_scroll = delta * 10.0
-	
-	$Stars.region_rect.position.y -= star_scroll
-	$StarsNext.region_rect.position.y = $Stars.region_rect.position.y
 	
 	$BackgroundTex.region_rect.position.y -= bg_scroll
 	$BackgroundTexNext.region_rect.position.y = $BackgroundTex.region_rect.position.y
@@ -274,27 +250,19 @@ func transition_theme() -> void:
 	current_theme_idx = (current_theme_idx + 1) % themes.size()
 	var next_theme = themes[current_theme_idx]
 	
-	# Prepare next textures and colors (both nebula background and stars layer)
-	$StarsNext.texture = next_theme.star_tex
-	$StarsNext.modulate = next_theme.stars
-	$StarsNext.modulate.a = 0.0
+	# Prepare next textures and colors (nebula background)
 	$BackgroundTexNext.texture = next_theme.tex
 	$BackgroundTexNext.modulate = Color(1, 1, 1, 0.0)
 	
 	var tween = create_tween().set_parallel(true)
-	tween.tween_property($Stars, "modulate:a", 0.0, 2.0)
 	tween.tween_property($BackgroundTex, "modulate:a", 0.0, 2.0)
-	tween.tween_property($StarsNext, "modulate:a", 1.0, 2.0)
 	tween.tween_property($BackgroundTexNext, "modulate:a", 0.4, 2.0)
 	tween.tween_property($Background, "color", next_theme.bg, 2.0)
 	
 	await tween.finished
-	$Stars.texture = $StarsNext.texture
-	$Stars.modulate = $StarsNext.modulate
 	$BackgroundTex.texture = $BackgroundTexNext.texture
 	$BackgroundTex.modulate.a = 0.4
 	
-	$StarsNext.modulate.a = 0.0
 	$BackgroundTexNext.modulate.a = 0.0
 
 func on_enemy_killed() -> void:

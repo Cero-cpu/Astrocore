@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://ndq5cl3uswyt" path="res://src/scripts/game.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://cnrg6c73thw43" path="res://src/scenes/player.tscn" id="2_player"]
-[ext_resource type="Texture2D" uid="uid://dlci1mlymg8is" path="res://Skyel Space Shooter - FREE/Backgrounds/spr_stars.png" id="3_stars"]
 [ext_resource type="Texture2D" uid="uid://c74hkui0lek3e" path="res://Skyel Space Shooter - FREE/Backgrounds/spr_background_01.png" id="4_bg1"]
 [ext_resource type="AudioStream" uid="uid://22oyi5mpjaft" path="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/30 Retro Space Level Up.mp3" id="5_audio"]
 [ext_resource type="Script" path="res://src/scripts/effects_manager.gd" id="6_fx"]
@@ -64,25 +63,6 @@ scale = Vector2(4.5, 4.5)
 texture = ExtResource("4_bg1")
 region_enabled = true
 region_rect = Rect2(0, 0, 256, 144)
-
-[node name="Stars" type="Sprite2D" parent="." unique_id=1817681977]
-texture_filter = 1
-texture_repeat = 2
-position = Vector2(360, 640)
-scale = Vector2(4, 4)
-texture = ExtResource("3_stars")
-region_enabled = true
-region_rect = Rect2(0, 0, 500, 500)
-
-[node name="StarsNext" type="Sprite2D" parent="." unique_id=1921325823]
-modulate = Color(1, 1, 1, 0)
-texture_filter = 1
-texture_repeat = 2
-position = Vector2(360, 640)
-scale = Vector2(4, 4)
-texture = ExtResource("3_stars")
-region_enabled = true
-region_rect = Rect2(0, 0, 500, 500)
 
 [node name="Grid" type="Node2D" parent="." unique_id=68708562]
 modulate = Color(1, 1, 1, 0.1)
