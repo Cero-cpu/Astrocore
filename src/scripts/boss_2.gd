@@ -10,7 +10,6 @@ func _ready() -> void:
 	add_to_group("boss")
 	
 	$Sprite2D.texture = preload("res://Pixel SHMUP Free 1.3/Pixel SHMUP Free/large_enemy_02.png")
-	$Sprite2D.modulate = Color(0.2, 5, 2, 1) # Emerald Neon
 	
 	$HealthBar.max_value = max_health
 	$HealthBar.value = health
