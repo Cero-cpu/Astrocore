@@ -440,49 +440,19 @@ func setup_ui() -> void:
 	hp_bar.show_percentage = false
 	hp_hbox.add_child(hp_bar)
 	
-	var hp_bg_style = StyleBoxFlat.new()
-	hp_bg_style.bg_color = Color(0.05, 0.1, 0.05, 0.6)
-	hp_bg_style.border_width_left = 1
-	hp_bg_style.border_width_top = 1
-	hp_bg_style.border_width_right = 1
-	hp_bg_style.border_width_bottom = 1
-	hp_bg_style.border_color = Color(0.1, 0.5, 0.1, 0.4)
-	hp_bg_style.corner_radius_top_left = 4
-	hp_bg_style.corner_radius_bottom_right = 4
+	var hp_bg_style = StyleBoxTexture.new()
+	hp_bg_style.texture = load("res://ui_pack/scifi pack2/HUD/loading bar3-bg.png")
 	hp_bar.add_theme_stylebox_override("background", hp_bg_style)
 	
-	var hp_fill_style = StyleBoxFlat.new()
-	hp_fill_style.bg_color = Color(0.1, 0.9, 0.1, 1)
-	hp_fill_style.border_width_right = 2
-	hp_fill_style.border_color = Color(0.5, 5, 0.5, 1)
-	hp_fill_style.corner_radius_top_left = 4
-	hp_fill_style.corner_radius_bottom_right = 4
+	var hp_fill_style = StyleBoxTexture.new()
+	hp_fill_style.texture = load("res://ui_pack/scifi pack2/HUD/loading bar3-fg.png")
 	hp_bar.add_theme_stylebox_override("fill", hp_fill_style)
 	
-	# Score & Level (Right)
-	var stats_vbox = VBoxContainer.new()
-	stats_vbox.name = "StatsVBox"
-	stats_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hud_hbox.add_child(stats_vbox)
-	
-	var score_label = Label.new()
-	score_label.name = "ScoreLabel"
-	score_label.text = "0000000"
-	score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	score_label.add_theme_color_override("font_color", Color(0.3, 0.8, 5, 1))
-	if main_font: score_label.add_theme_font_override("font", main_font)
-	score_label.add_theme_font_size_override("font_size", 44)
-	stats_vbox.add_child(score_label)
-	
-	var lvl_label = Label.new()
-	lvl_label.name = "LvlLabel"
-	lvl_label.text = "LEVEL 01"
-	lvl_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	lvl_label.add_theme_color_override("font_color", Color(0.3, 0.8, 5, 0.6))
-	if main_font: lvl_label.add_theme_font_override("font", main_font)
-	lvl_label.add_theme_font_size_override("font_size", 44)
-	stats_vbox.add_child(lvl_label)
-	
+	# Empty spacer to replace stats and keep HP bar from stretching fully
+	var top_spacer = Control.new()
+	top_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hud_hbox.add_child(top_spacer)
+
 	# ——— Power-up Container (Left Side) ———
 	var pu_container = VBoxContainer.new()
 	pu_container.name = "PowerUpContainer"
@@ -515,34 +485,32 @@ func setup_ui() -> void:
 	boss_bar.show_percentage = false
 	boss_ui.add_child(boss_bar)
 	
-	var boss_bg_style = StyleBoxFlat.new()
-	boss_bg_style.bg_color = Color(0.1, 0.05, 0.05, 0.8)
-	boss_bg_style.border_width_left = 2
-	boss_bg_style.border_width_top = 2
-	boss_bg_style.border_width_right = 2
-	boss_bg_style.border_width_bottom = 2
-	boss_bg_style.border_color = Color(0.5, 0, 0, 1)
+	var boss_bg_style = StyleBoxTexture.new()
+	boss_bg_style.texture = load("res://ui_pack/scifi pack2/HUD/loading bar4-bg.png")
 	boss_bar.add_theme_stylebox_override("background", boss_bg_style)
 	
-	var boss_fill_style = StyleBoxFlat.new()
-	boss_fill_style.bg_color = Color(1.0, 0.1, 0.1, 1)
-	boss_fill_style.border_width_right = 3
-	boss_fill_style.border_color = Color(5, 0.5, 0.5, 1)
+	var boss_fill_style = StyleBoxTexture.new()
+	boss_fill_style.texture = load("res://ui_pack/scifi pack2/HUD/loading bar4-fg.png")
 	boss_bar.add_theme_stylebox_override("fill", boss_fill_style)
 	
 	# ——— Pause Button (Top-Right Corner) ———
 	var pause_btn = TextureButton.new()
 	pause_btn.name = "PauseBtn"
-	var pause_tex = load("res://boton_pausar.png")
+	var pause_tex = load("res://ui_pack/scifi pack2/buttons/buttons with icons/normal/pause.png")
+	var pause_hover = load("res://ui_pack/scifi pack2/buttons/buttons with icons/hovered/pause.png")
 	if pause_tex:
 		pause_btn.texture_normal = pause_tex
+		pause_btn.texture_hover = pause_hover
+		pause_btn.texture_pressed = pause_hover
 		pause_btn.ignore_texture_size = true
 		pause_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-	pause_btn.custom_minimum_size = Vector2(50, 50)
+	pause_btn.custom_minimum_size = Vector2(120, 120)
 	ui.add_child(pause_btn)
 	pause_btn.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	pause_btn.offset_left = -70
-	pause_btn.offset_top = 120
+	pause_btn.offset_left = -150
+	pause_btn.offset_right = -30
+	pause_btn.offset_top = 70
+	pause_btn.offset_bottom = 190
 	pause_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	pause_btn.mouse_entered.connect(func(): pause_btn.modulate = Color(1.5, 1.5, 1.5, 1.0))
 	pause_btn.mouse_exited.connect(func(): pause_btn.modulate = Color(1.0, 1.0, 1.0, 1.0))
@@ -553,9 +521,11 @@ func setup_ui() -> void:
 	footer.name = "HUDPathFooter"
 	ui.add_child(footer)
 	footer.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	footer.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	footer.offset_bottom = -20
 	footer.offset_left = 30
 	footer.offset_right = -30
+	footer.offset_top = -150
 	
 	var credits = Label.new()
 	credits.text = "TERMINAL v2.0 // julian.dev"
@@ -563,15 +533,45 @@ func setup_ui() -> void:
 	if main_font: credits.add_theme_font_override("font", main_font)
 	credits.add_theme_font_size_override("font_size", 32)
 	credits.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	credits.size_flags_vertical = Control.SIZE_SHRINK_END
 	footer.add_child(credits)
 	
 	var burst_label = Label.new()
 	burst_label.name = "BurstLabel"
 	burst_label.text = "BURST: 1"
+	burst_label.size_flags_vertical = Control.SIZE_SHRINK_END
 	burst_label.add_theme_color_override("font_color", Color(1, 0.8, 0.1, 0.8))
 	if main_font: burst_label.add_theme_font_override("font", main_font)
 	burst_label.add_theme_font_size_override("font_size", 44)
 	footer.add_child(burst_label)
+	
+	var spacer_footer = Control.new()
+	spacer_footer.custom_minimum_size = Vector2(40, 0)
+	footer.add_child(spacer_footer)
+	
+	var stats_vbox = VBoxContainer.new()
+	stats_vbox.name = "StatsVBox"
+	stats_vbox.size_flags_vertical = Control.SIZE_SHRINK_END
+	stats_vbox.alignment = BoxContainer.ALIGNMENT_END
+	footer.add_child(stats_vbox)
+	
+	var score_label = Label.new()
+	score_label.name = "ScoreLabel"
+	score_label.text = "0000000"
+	score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	score_label.add_theme_color_override("font_color", Color(0.3, 0.8, 5, 1))
+	if main_font: score_label.add_theme_font_override("font", main_font)
+	score_label.add_theme_font_size_override("font_size", 52)
+	stats_vbox.add_child(score_label)
+	
+	var lvl_label = Label.new()
+	lvl_label.name = "LvlLabel"
+	lvl_label.text = "LEVEL 01"
+	lvl_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	lvl_label.add_theme_color_override("font_color", Color(0.3, 0.8, 5, 0.6))
+	if main_font: lvl_label.add_theme_font_override("font", main_font)
+	lvl_label.add_theme_font_size_override("font_size", 40)
+	stats_vbox.add_child(lvl_label)
 	
 	
 	# ——— Pause Overlay ———
@@ -601,21 +601,22 @@ func setup_ui() -> void:
 	resume_btn.custom_minimum_size = Vector2(320, 80)
 	if main_font: resume_btn.add_theme_font_override("font", main_font)
 	resume_btn.add_theme_font_size_override("font_size", 44)
-	var resume_style = StyleBoxFlat.new()
-	resume_style.bg_color = Color(0.1, 0.4, 0.1, 0.8)
-	resume_style.border_width_left = 2
-	resume_style.border_width_top = 2
-	resume_style.border_width_right = 2
-	resume_style.border_width_bottom = 2
-	resume_style.border_color = Color(0.3, 0.8, 0.3, 0.5)
-	resume_style.corner_radius_top_left = 10
-	resume_style.corner_radius_bottom_right = 10
+	var resume_style = StyleBoxTexture.new()
+	resume_style.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/green-normal.png")
+	resume_style.texture_margin_left = 25
+	resume_style.texture_margin_right = 25
+	resume_style.texture_margin_top = 25
+	resume_style.texture_margin_bottom = 25
 	resume_btn.add_theme_stylebox_override("normal", resume_style)
 	
-	var resume_hover = resume_style.duplicate()
-	resume_hover.bg_color = Color(0.2, 0.6, 0.2, 0.9)
-	resume_hover.border_color = Color(0.5, 5.0, 0.5, 1)
+	var resume_hover = StyleBoxTexture.new()
+	resume_hover.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/green-hovered.png")
+	resume_hover.texture_margin_left = 25
+	resume_hover.texture_margin_right = 25
+	resume_hover.texture_margin_top = 25
+	resume_hover.texture_margin_bottom = 25
 	resume_btn.add_theme_stylebox_override("hover", resume_hover)
+	resume_btn.add_theme_stylebox_override("pressed", resume_hover)
 	pause_vbox.add_child(resume_btn)
 	resume_btn.pressed.connect(_toggle_pause)
 	
@@ -626,21 +627,22 @@ func setup_ui() -> void:
 	if main_font: lobby_btn.add_theme_font_override("font", main_font)
 	lobby_btn.add_theme_font_size_override("font_size", 44)
 	
-	var lobby_style = StyleBoxFlat.new()
-	lobby_style.bg_color = Color(0.05, 0.2, 0.4, 0.8)
-	lobby_style.border_width_left = 2
-	lobby_style.border_width_top = 2
-	lobby_style.border_width_right = 2
-	lobby_style.border_width_bottom = 2
-	lobby_style.border_color = Color(0.2, 0.6, 1.0, 0.5)
-	lobby_style.corner_radius_top_left = 10
-	lobby_style.corner_radius_bottom_right = 10
+	var lobby_style = StyleBoxTexture.new()
+	lobby_style.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/red-normal.png")
+	lobby_style.texture_margin_left = 25
+	lobby_style.texture_margin_right = 25
+	lobby_style.texture_margin_top = 25
+	lobby_style.texture_margin_bottom = 25
 	lobby_btn.add_theme_stylebox_override("normal", lobby_style)
 	
-	var lobby_hover = lobby_style.duplicate()
-	lobby_hover.bg_color = Color(0.1, 0.4, 0.8, 0.9)
-	lobby_hover.border_color = Color(0.4, 0.8, 5, 1)
+	var lobby_hover = StyleBoxTexture.new()
+	lobby_hover.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/red-hovered.png")
+	lobby_hover.texture_margin_left = 25
+	lobby_hover.texture_margin_right = 25
+	lobby_hover.texture_margin_top = 25
+	lobby_hover.texture_margin_bottom = 25
 	lobby_btn.add_theme_stylebox_override("hover", lobby_hover)
+	lobby_btn.add_theme_stylebox_override("pressed", lobby_hover)
 	pause_vbox.add_child(lobby_btn)
 	lobby_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://src/scenes/lobby.tscn"))
 	pause_center.add_child(pause_vbox)
@@ -743,21 +745,22 @@ func _show_game_over() -> void:
 	if main_font: reboot_btn.add_theme_font_override("font", main_font)
 	reboot_btn.add_theme_font_size_override("font_size", 60)
 	
-	var retry_style = StyleBoxFlat.new()
-	retry_style.bg_color = Color(0.4, 0.05, 0.05, 0.8)
-	retry_style.border_width_left = 2
-	retry_style.border_width_top = 2
-	retry_style.border_width_right = 2
-	retry_style.border_width_bottom = 2
-	retry_style.border_color = Color(0.8, 0.2, 0.2, 0.5)
-	retry_style.corner_radius_top_left = 12
-	retry_style.corner_radius_bottom_right = 12
+	var retry_style = StyleBoxTexture.new()
+	retry_style.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/blue-normal.png")
+	retry_style.texture_margin_left = 25
+	retry_style.texture_margin_right = 25
+	retry_style.texture_margin_top = 25
+	retry_style.texture_margin_bottom = 25
 	reboot_btn.add_theme_stylebox_override("normal", retry_style)
 	
-	var retry_hover = retry_style.duplicate()
-	retry_hover.bg_color = Color(0.6, 0.1, 0.1, 0.9)
-	retry_hover.border_color = Color(5.0, 0.3, 0.3, 1) # Neon red glow
+	var retry_hover = StyleBoxTexture.new()
+	retry_hover.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/blue-hovered.png")
+	retry_hover.texture_margin_left = 25
+	retry_hover.texture_margin_right = 25
+	retry_hover.texture_margin_top = 25
+	retry_hover.texture_margin_bottom = 25
 	reboot_btn.add_theme_stylebox_override("hover", retry_hover)
+	reboot_btn.add_theme_stylebox_override("pressed", retry_hover)
 	
 	var center_btn = HBoxContainer.new()
 	center_btn.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -772,21 +775,22 @@ func _show_game_over() -> void:
 	if main_font: go_lobby_btn.add_theme_font_override("font", main_font)
 	go_lobby_btn.add_theme_font_size_override("font_size", 44)
 	
-	var go_lobby_style = StyleBoxFlat.new()
-	go_lobby_style.bg_color = Color(0.05, 0.15, 0.3, 0.8)
-	go_lobby_style.border_width_left = 2
-	go_lobby_style.border_width_top = 2
-	go_lobby_style.border_width_right = 2
-	go_lobby_style.border_width_bottom = 2
-	go_lobby_style.border_color = Color(0.2, 0.5, 1.0, 0.6)
-	go_lobby_style.corner_radius_top_left = 12
-	go_lobby_style.corner_radius_bottom_right = 12
+	var go_lobby_style = StyleBoxTexture.new()
+	go_lobby_style.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/red-normal.png")
+	go_lobby_style.texture_margin_left = 25
+	go_lobby_style.texture_margin_right = 25
+	go_lobby_style.texture_margin_top = 25
+	go_lobby_style.texture_margin_bottom = 25
 	go_lobby_btn.add_theme_stylebox_override("normal", go_lobby_style)
 	
-	var go_lobby_hover = go_lobby_style.duplicate()
-	go_lobby_hover.bg_color = Color(0.1, 0.3, 0.6, 0.9)
-	go_lobby_hover.border_color = Color(0.3, 0.8, 5, 1)
+	var go_lobby_hover = StyleBoxTexture.new()
+	go_lobby_hover.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/red-hovered.png")
+	go_lobby_hover.texture_margin_left = 25
+	go_lobby_hover.texture_margin_right = 25
+	go_lobby_hover.texture_margin_top = 25
+	go_lobby_hover.texture_margin_bottom = 25
 	go_lobby_btn.add_theme_stylebox_override("hover", go_lobby_hover)
+	go_lobby_btn.add_theme_stylebox_override("pressed", go_lobby_hover)
 	
 	var center_go_lobby = HBoxContainer.new()
 	center_go_lobby.alignment = BoxContainer.ALIGNMENT_CENTER

@@ -9,6 +9,7 @@ enum Type {
 
 var direction: Vector2 = Vector2.UP
 var skin_color: Color = Color(-1, -1, -1, -1) # Sentinel: -1 means "use random"
+var _screen_size: Vector2
 
 func _ready() -> void:
 	add_to_group("player_projectiles")
@@ -19,6 +20,8 @@ func _ready() -> void:
 		$Sprite2D.modulate = Color(0.2, 1.5, 5, 1) # Glow Cyan Neon
 	else:
 		$Sprite2D.modulate = Color(5, 0.2, 1.5, 1) # Glow Pink Neon
+	
+	_screen_size = get_viewport_rect().size
 
 func _process(delta: float) -> void:
 	if is_in_group("wave_projectiles"):
@@ -41,9 +44,8 @@ func _process(delta: float) -> void:
 	
 	position += direction * speed * delta
 	
-	# Dynamic cleanup for optimization
-	var screen_size = get_viewport_rect().size
-	if position.y < -150 or position.y > screen_size.y + 150 or position.x < -150 or position.x > screen_size.x + 150:
+	# High-performance dynamic cleanup for off-screen bounds
+	if position.y < -150.0 or position.y > _screen_size.y + 150.0 or position.x < -150.0 or position.x > _screen_size.x + 150.0:
 		queue_free()
 
 func _on_area_entered(area: Area2D) -> void:

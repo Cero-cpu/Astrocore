@@ -193,20 +193,22 @@ func _setup_lobby_ui() -> void:
 			rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			btn_center.add_child(rect)
 		
-		var style = StyleBoxFlat.new()
-		style.bg_color = Color(0.05, 0.05, 0.15, 0.8)
-		style.border_width_left = 2
-		style.border_width_top = 2
-		style.border_width_right = 2
-		style.border_width_bottom = 2
-		style.border_color = Color(0.2, 0.4, 1.0, 0.3)
-		style.corner_radius_top_left = 5
-		style.corner_radius_bottom_right = 5
+		var style = StyleBoxTexture.new()
+		style.texture = load("res://ui_pack/scifi pack2/HUD/character profile frame.png")
+		style.texture_margin_left = 20
+		style.texture_margin_right = 20
+		style.texture_margin_top = 20
+		style.texture_margin_bottom = 20
+		style.modulate_color = Color(0.8, 0.9, 1.0, 0.9)
 		btn.add_theme_stylebox_override("normal", style)
 		
-		var hover = style.duplicate()
-		hover.border_color = Color(0.4, 0.8, 5, 1)
-		hover.bg_color = Color(0.1, 0.15, 0.3, 0.9)
+		var hover = StyleBoxTexture.new()
+		hover.texture = load("res://ui_pack/scifi pack2/HUD/character profile frame.png")
+		hover.texture_margin_left = 20
+		hover.texture_margin_right = 20
+		hover.texture_margin_top = 20
+		hover.texture_margin_bottom = 20
+		hover.modulate_color = Color(1.2, 1.5, 2.0, 1.0) # Bright neon glow effect
 		btn.add_theme_stylebox_override("hover", hover)
 		
 		# Mobile touch-swipe drag scroll system for buttons
@@ -245,18 +247,22 @@ func _setup_lobby_ui() -> void:
 	if main_font: start_btn.add_theme_font_override("font", main_font)
 	start_btn.add_theme_font_size_override("font_size", 52)
 	
-	var start_style = StyleBoxFlat.new()
-	start_style.bg_color = Color(0.1, 0.6, 1.0, 0.8)
-	start_style.border_width_bottom = 5
-	start_style.border_color = Color(0.0, 0.3, 0.6, 1)
-	start_style.corner_radius_top_left = 15
-	start_style.corner_radius_bottom_right = 15
+	var start_style = StyleBoxTexture.new()
+	start_style.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/blue-normal.png")
+	start_style.texture_margin_left = 25
+	start_style.texture_margin_right = 25
+	start_style.texture_margin_top = 25
+	start_style.texture_margin_bottom = 25
 	start_btn.add_theme_stylebox_override("normal", start_style)
 	
-	var start_hover = start_style.duplicate()
-	start_hover.bg_color = Color(0.2, 0.8, 1.5, 1.0)
-	start_hover.border_color = Color(0.1, 0.5, 1.0, 1)
+	var start_hover = StyleBoxTexture.new()
+	start_hover.texture = load("res://ui_pack/scifi pack2/buttons/buttons without icons/variation1/blue-hovered.png")
+	start_hover.texture_margin_left = 25
+	start_hover.texture_margin_right = 25
+	start_hover.texture_margin_top = 25
+	start_hover.texture_margin_bottom = 25
 	start_btn.add_theme_stylebox_override("hover", start_hover)
+	start_btn.add_theme_stylebox_override("pressed", start_hover)
 	
 	start_btn.pressed.connect(_on_start_pressed)
 	vbox.add_child(start_btn)
@@ -272,7 +278,7 @@ func _setup_lobby_ui() -> void:
 
 func _select_skin(path: String, btn: Button) -> void:
 	player_preview.set_skin(path)
-	_play_ui_sfx()
+	MusicManager.play_ui_click()
 	
 	# Animation for button
 	var tween = create_tween()
@@ -295,12 +301,9 @@ func _animate_entrance() -> void:
 	ship_tween.tween_property(player_preview, "position:y", 480, 0.8).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func _on_start_pressed() -> void:
-	_play_ui_sfx()
+	MusicManager.play_ui_start()
 	var tween = create_tween()
 	tween.tween_property(ui, "modulate:a", 0.0, 0.3)
 	await tween.finished
 	get_tree().change_scene_to_file("res://src/scenes/game.tscn")
 
-func _play_ui_sfx() -> void:
-	# Could trigger a sound here
-	pass

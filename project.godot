@@ -15,6 +15,10 @@ run/main_scene="res://src/scenes/lobby.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+MusicManager="*res://src/scripts/music_manager.gd"
+
 [display]
 
 window/size/viewport_width=720
@@ -63,7 +67,3 @@ pointing/emulate_touch_from_mouse=true
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 textures/vram_compression/import_etc2_astc=true
-
-[autoload]
-
-MusicManager="*res://src/scripts/music_manager.gd"

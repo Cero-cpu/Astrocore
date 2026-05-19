@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cnrg6c73thw43" path="res://src/scenes/player.tscn" id="2_player"]
 [ext_resource type="Texture2D" uid="uid://c74hkui0lek3e" path="res://Skyel Space Shooter - FREE/Backgrounds/spr_background_01.png" id="4_bg1"]
 [ext_resource type="AudioStream" uid="uid://22oyi5mpjaft" path="res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/30 Retro Space Level Up.mp3" id="5_audio"]
-[ext_resource type="Script" path="res://src/scripts/effects_manager.gd" id="6_fx"]
+[ext_resource type="Script" uid="uid://dajj5dnuhw37i" path="res://src/scripts/effects_manager.gd" id="6_fx"]
 
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 3
@@ -19,31 +19,37 @@ glow_bloom = 0.2
 glow_blend_mode = 0
 
 [node name="Game" type="Node2D" unique_id=468184852]
+texture_filter = 1
 script = ExtResource("1_script")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1980843454]
+texture_filter = 1
 anchor_mode = 0
 
-[node name="EffectsManager" type="CanvasLayer" parent="."]
+[node name="EffectsManager" type="CanvasLayer" parent="." unique_id=352994477]
 layer = 10
 script = ExtResource("6_fx")
 
-[node name="FXRect" type="ColorRect" parent="EffectsManager"]
+[node name="FXRect" type="ColorRect" parent="EffectsManager" unique_id=874397036]
+texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1472525884]
 environment = SubResource("Environment_1")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1337060003]
+texture_filter = 1
 offset_left = -140.0
 offset_right = 860.0
 offset_bottom = 1280.0
 color = Color(0.01, 0.01, 0.05, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="BackgroundTex" type="Sprite2D" parent="." unique_id=2138359541]
 texture_filter = 1
@@ -66,18 +72,22 @@ region_rect = Rect2(0, 0, 256, 144)
 
 [node name="Grid" type="Node2D" parent="." unique_id=68708562]
 modulate = Color(1, 1, 1, 0.1)
+texture_filter = 1
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=95695440]
 
 [node name="UI" type="Control" parent="CanvasLayer" unique_id=1499790123]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." unique_id=240531514 instance=ExtResource("2_player")]
+texture_filter = 1
 position = Vector2(360, 1100)
 
 [node name="LevelUpPlayer" type="AudioStreamPlayer" parent="." unique_id=2106851606]

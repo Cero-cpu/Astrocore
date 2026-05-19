@@ -8,6 +8,11 @@ var player1: AudioStreamPlayer
 var player2: AudioStreamPlayer
 var active_player: AudioStreamPlayer = null
 
+var sfx_player: AudioStreamPlayer
+var ui_click_sound = preload("res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/01 Retro Lazer #1.mp3")
+var ui_start_sound = preload("res://Free Retro Sci-Fi Sound Fx/Free Retro Sci-Fi Sound Fx/30 Retro Space Level Up.mp3")
+
+
 var target_volume_db: float = -6.0 # Premium balanced volume level
 var crossfade_duration: float = 1.5
 
@@ -24,6 +29,10 @@ func _ready() -> void:
 	player2.bus = &"Music"
 	add_child(player2)
 	
+	sfx_player = AudioStreamPlayer.new()
+	sfx_player.bus = &"Master" # Using Master just in case SFX bus doesn't exist
+	add_child(sfx_player)
+	
 	active_player = player1
 
 func play_lobby_music() -> void:
@@ -38,8 +47,9 @@ func play_track(path: String) -> void:
 		return
 		
 	# Safeguard: if the file does not exist, do not crash!
-	if not FileAccess.file_exists(path):
+	if not ResourceLoader.exists(path):
 		push_warning("[MusicManager] Music track not found: %s. Placeholder state active." % path)
+		stop_current_music()
 		return
 		
 	var stream = load(path) as AudioStream
@@ -79,3 +89,25 @@ func play_track(path: String) -> void:
 	
 	# Instantly switch roles so future calls know what the current active player is
 	active_player = next_player
+
+func stop_current_music() -> void:
+	if active_player and active_player.playing:
+		var tween = create_tween()
+		var old_player = active_player
+		tween.tween_property(old_player, "volume_db", -80.0, crossfade_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		tween.tween_callback(func():
+			if old_player.playing:
+				old_player.stop()
+		)
+
+func play_ui_click() -> void:
+	if ui_click_sound:
+		sfx_player.stream = ui_click_sound
+		sfx_player.volume_db = -12.0
+		sfx_player.play()
+
+func play_ui_start() -> void:
+	if ui_start_sound:
+		sfx_player.stream = ui_start_sound
+		sfx_player.volume_db = 0.0
+		sfx_player.play()

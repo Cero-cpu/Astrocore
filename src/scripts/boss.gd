@@ -12,6 +12,7 @@ var target_y = 120
 var moving_right = true
 var speed = 150
 var texture_to_set: Texture2D = null
+var is_dying: bool = false
 
 func _ready() -> void:
 	if texture_to_set:
@@ -47,6 +48,8 @@ func _ready() -> void:
 		tween.tween_property(global_bar, "value", max_health, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _process(delta: float) -> void:
+	if is_dying: return
+	
 	# Move to position
 	if position.y < target_y:
 		position.y += speed * delta
@@ -95,6 +98,8 @@ func shoot() -> void:
 			get_parent().add_child(p)
 
 func take_damage(amount: int) -> void:
+	if is_dying: return
+	
 	health -= amount
 	var game = get_parent()
 	if game and game.has_node("CanvasLayer/UI/BossUI/BossHP"):
@@ -106,9 +111,12 @@ func take_damage(amount: int) -> void:
 	tween.tween_property($Sprite2D, "modulate:v", 1.0, 0.05)
 	
 	if health <= 0:
+		is_dying = true
 		die()
 
 func die() -> void:
+	$CollisionShape2D.set_deferred("disabled", true)
+	
 	# Epic Death sequence
 	var game = get_parent()
 	var fx = game.get_node_or_null("EffectsManager")

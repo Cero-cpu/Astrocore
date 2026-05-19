@@ -40,6 +40,7 @@ var original_sprite_scale: Vector2
 
 var shoot_timer: float = 0.0
 var can_shoot: bool = false
+var is_dying: bool = false
 
 func _ready() -> void:
 	_screen_height = get_viewport_rect().size.y
@@ -122,6 +123,7 @@ func _play_sfx(stream: AudioStream, volume: float = -9.0) -> void:
 	sfx.finished.connect(sfx.queue_free)
 
 func take_damage(amount: int) -> void:
+	if is_dying: return
 	health -= amount
 	if health > 0:
 		_play_sfx(hit_sound, -15.0) # Strategic subtle hit tick
@@ -140,6 +142,9 @@ func take_damage(amount: int) -> void:
 		return
 		
 	# ——— DEATH LOGIC ———
+	is_dying = true
+	$CollisionShape2D.set_deferred("disabled", true)
+	
 	# Spawn explosion
 	_play_sfx(death_sound, -10.0) # Balanced death sound
 	var exp_inst = explosion_scene.instantiate()
