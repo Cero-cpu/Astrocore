@@ -56,16 +56,11 @@ func _ready() -> void:
 	# Boss Warning
 	_boss_warning_label = Label.new()
 	_boss_warning_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_boss_warning_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	if font: _boss_warning_label.add_theme_font_override("font", font)
 	_boss_warning_label.add_theme_font_size_override("font_size", 100)
 	_boss_warning_label.add_theme_color_override("font_color", Color(5, 0.1, 0.1, 1))
-	_boss_warning_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	_boss_warning_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_boss_warning_label.grow_vertical = Control.GROW_DIRECTION_BOTH
-	_boss_warning_label.offset_top = -120
-	_boss_warning_label.offset_bottom = -20
-	_boss_warning_label.offset_left = -400
-	_boss_warning_label.offset_right = 400
+	_boss_warning_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_boss_warning_label.modulate.a = 0.0
 	_boss_warning_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_boss_warning_label)

@@ -38,80 +38,10 @@ const MAX_ENEMIES: int = 30
 const MAX_PROJECTILES: int = 80
 const KILLS_PER_BOSS: int = 50
 
-var themes = [
-	# Theme 0: Classic Cosmic Cyan
-	{
-		"bg": Color(0.01, 0.01, 0.05),
-		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_01.png")
-	},
-	# Theme 1: Crimson Void
-	{
-		"bg": Color(0.05, 0.01, 0.01),
-		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_02.png")
-	},
-	# Theme 2: Deep Emerald Nebula
-	{
-		"bg": Color(0.01, 0.05, 0.02),
-		"tex": preload("res://Shoot`em Up/Background_Full-0001.png")
-	},
-	# Theme 3: Amethyst Cosmic Cloud
-	{
-		"bg": Color(0.04, 0.01, 0.06),
-		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_01.png")
-	},
-	# Theme 4: Sovereign Gold
-	{
-		"bg": Color(0.05, 0.04, 0.01),
-		"tex": preload("res://Shoot`em Up/Background_Full-0001.png")
-	},
-	# Theme 5: Deep Space Void
-	{
-		"bg": Color(0.0, 0.0, 0.03),
-		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_02.png")
-	},
-	# Theme 6: Nebula Orange Flare
-	{
-		"bg": Color(0.05, 0.02, 0.0),
-		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_02.png")
-	},
-	# Theme 7: Cobalt Stardust
-	{
-		"bg": Color(0.01, 0.01, 0.04),
-		"tex": preload("res://Shoot`em Up/Background_Full-0001.png")
-	},
-	# Theme 8: Violet Cosmos
-	{
-		"bg": Color(0.03, 0.0, 0.05),
-		"tex": preload("res://Skyel Space Shooter - FREE/Backgrounds/spr_background_01.png")
-	},
-	# Theme 9: Infinite Horizon
-	{
-		"bg": Color(0.02, 0.02, 0.04),
-		"tex": preload("res://Shoot`em Up/Background_Full-0001.png")
-	}
-]
-var current_theme_idx: int = 0
+var current_level_node: Node2D
 
 func _ready() -> void:
-	# Dynamic background scaling for full-screen expand mode
-	var screen_size = get_viewport_rect().size
-	
-	# Fix Background ColorRect (Make it wider for safe areas)
-	$Background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	$Background.offset_left = -200
-	$Background.offset_right = 200
-	
-	# Fix Texture layers (expand to fill dynamic screen width + extra for safety)
-	for node_name in ["BackgroundTex", "BackgroundTexNext"]:
-		var node = get_node(node_name)
-		if node is Sprite2D:
-			node.centered = true
-			node.position = screen_size / 2
-			node.region_enabled = true
-			# 50% extra width/height to avoid black bars on any aspect ratio
-			node.region_rect = Rect2(Vector2.ZERO, screen_size * 1.5)
-	
-	# draw_grid() # Disabled at user request to keep maps clean and clear
+	load_level(game_level)
 	setup_ui()
 	# Cache UI references once (using find_child for robustness)
 	_ui = $CanvasLayer/UI
@@ -144,12 +74,7 @@ func _process(delta: float) -> void:
 	game_time += delta
 	difficulty_timer += delta
 	
-	# Scroll backgrounds
-	var bg_scroll = delta * 10.0
-	
-	$BackgroundTex.region_rect.position.y -= bg_scroll
-	$BackgroundTexNext.region_rect.position.y = $BackgroundTex.region_rect.position.y
-	
+
 	# Spawn enemy (Disabled during boss, capped for performance)
 	if not boss_active:
 		spawn_timer -= delta
@@ -237,7 +162,7 @@ func upgrade_player() -> void:
 	_fx.chromatic_pulse(4.0, 1.0)
 	_fx.flash(Color(0.2, 0.8, 1, 0.5), 0.4)
 	game_level += 1
-	transition_theme()
+	load_level(game_level)
 	var current_burst = player.burst_count
 	var current_rate = player.fire_rate
 	
@@ -246,24 +171,23 @@ func upgrade_player() -> void:
 	else:
 		player.upgrade_fire_rate(current_rate * 0.9)
 
-func transition_theme() -> void:
-	current_theme_idx = (current_theme_idx + 1) % themes.size()
-	var next_theme = themes[current_theme_idx]
-	
-	# Prepare next textures and colors (nebula background)
-	$BackgroundTexNext.texture = next_theme.tex
-	$BackgroundTexNext.modulate = Color(1, 1, 1, 0.0)
-	
-	var tween = create_tween().set_parallel(true)
-	tween.tween_property($BackgroundTex, "modulate:a", 0.0, 2.0)
-	tween.tween_property($BackgroundTexNext, "modulate:a", 0.4, 2.0)
-	tween.tween_property($Background, "color", next_theme.bg, 2.0)
-	
-	await tween.finished
-	$BackgroundTex.texture = $BackgroundTexNext.texture
-	$BackgroundTex.modulate.a = 0.4
-	
-	$BackgroundTexNext.modulate.a = 0.0
+func load_level(level: int) -> void:
+	var level_path = "res://src/levels/level_%d.tscn" % level
+	if not ResourceLoader.exists(level_path):
+		# Loop back to earlier levels if we run out of unique levels
+		var mod_level = ((level - 1) % 10) + 1
+		level_path = "res://src/levels/level_%d.tscn" % mod_level
+		
+	var level_scene = load(level_path)
+	if level_scene:
+		var new_level = level_scene.instantiate()
+		
+		# Optional: Add transition effect here or let the new level handle it
+		if is_instance_valid(current_level_node):
+			current_level_node.queue_free()
+			
+		$LevelContainer.add_child(new_level)
+		current_level_node = new_level
 
 func on_enemy_killed() -> void:
 	# Combo system
@@ -361,22 +285,7 @@ func spawn_powerup() -> void:
 		
 	add_child(pu)
 
-func draw_grid() -> void:
-	var grid_node = $Grid
-	var step = 64
-	var screen_size = get_viewport_rect().size
-	for x in range(0, int(screen_size.x), step):
-		var line = Line2D.new()
-		line.points = PackedVector2Array([Vector2(x, 0), Vector2(x, screen_size.y)])
-		line.width = 1.0
-		line.default_color = Color(0.2, 0.5, 1.0, 0.3)
-		grid_node.add_child(line)
-	for y in range(0, int(screen_size.y), step):
-		var line = Line2D.new()
-		line.points = PackedVector2Array([Vector2(0, y), Vector2(screen_size.x, y)])
-		line.width = 1.0
-		line.default_color = Color(0.2, 0.5, 1.0, 0.3)
-		grid_node.add_child(line)
+
 
 func setup_ui() -> void:
 	var ui = $CanvasLayer/UI

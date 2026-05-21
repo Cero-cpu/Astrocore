@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ck524w7v21jt4" path="res://Pixel SHMUP Free 1.3/Pixel SHMUP Free/large_enemy_02.png" id="2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_deik5"]
-radius = 234.10468
+radius = 150.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
 bg_color = Color(5, 0.1, 0.1, 1)

@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bfnaeo510cd6g"]
+
+[ext_resource type="Script" uid="uid://cn2vu6gcp0x47" path="res://src/levels/level_base.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://kgphw8hmuen4" path="res://Shoot`em Up/Background_Full-0001.png" id="2_j6mmr"]
+[ext_resource type="Texture2D" uid="uid://ckd5ms5by3yh1" path="res://Shoot`em Up/Background_SmallStars-0001.png" id="3_j6mmr"]
+
+[node name="Level_2" type="Node2D" unique_id=1998882438]
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1725145986]
+offset_left = -200.0
+offset_right = 920.0
+offset_bottom = 1280.0
+color = Color(0.05, 0.01, 0.01, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="BackgroundTex" type="Sprite2D" parent="." unique_id=1874894595]
+texture_repeat = 2
+position = Vector2(-10, 16.999998)
+scale = Vector2(8.98449, 6.550781)
+texture = ExtResource("2_j6mmr")
+region_enabled = true
+region_rect = Rect2(0, 0, 1080, 1920)
+
+[node name="BackgroundSmallStars0001" type="Sprite2D" parent="." unique_id=1964842300]
+position = Vector2(351.50003, 658.5)
+scale = Vector2(3.071875, 4.578125)
+texture = ExtResource("3_j6mmr")
